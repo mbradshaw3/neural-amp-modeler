@@ -390,6 +390,10 @@ class Model(pl.LightningModule, InitializableFromConfig):
                 raise e
             logger.warning("MRSTFT failed on device; falling back to CPU")
             self._mrstft_device = backup_device
+            # Alternative: Define environment variable:
+            # PYTORCH_ENABLE_MPS_FALLBACK=1
+            # (This doesn't seem to improve things; that one op seems to take the
+            # majority of the time.)
             return multi_resolution_stft_loss(
                 preds, targets, self._mrstft, device=self._mrstft_device
             )
